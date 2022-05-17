@@ -4,32 +4,44 @@ require './lib/ship'
 cruiser = Ship.new("Cruiser", 3)
 #=> #<Ship:0x00007feb05112d10...>
 
-cruiser.name
-#=> "Cruiser"
+it 'has name' do
+  expect(cruiser.name).to eq("Cruiser")
+  #=> "Cruiser"
+end
 
-cruiser.length
-#=> 3
+it 'has length' do
+  expect(cruiser.length).to eq(3)
+  #=> 3
+end
 
-cruiser.health
-#=> 3
+it 'has health' do
+  expect(cruiser.health).to eq(3)
+  #=> 3
+end
 
-cruiser.sunk?
-#=> false
+it 'has sunk?' do
+  expect(cruiser.sunk?).to eq(false)
+  #=> false
+end
 
-cruiser.hit
+it 'has reduced health after hit' do
+  cruiser.hit
 
-cruiser.health
-#=> 2
+  expect(cruiser.health).to eq(2)
+  #=> 2
 
-cruiser.hit
+  cruiser.hit
 
-cruiser.health
-#=> 1
+  expect(cruiser.health).to eq(1)
+  #=> 1
+end
 
-cruiser.sunk?
-#=> false
+it 'has sunk' do
+  expect(cruiser.sunk?).to eq(false)
+  #=> false
 
-cruiser.hit
+  cruiser.hit
 
-cruiser.sunk?
-#=> true
+  expect(cruiser.sunk?).to eq(true)
+  #=> true
+end
