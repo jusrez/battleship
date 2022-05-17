@@ -1,47 +1,40 @@
 require './lib/ship'
-#=> true
 
-cruiser = Ship.new("Cruiser", 3)
-#=> #<Ship:0x00007feb05112d10...>
+RSpec.describe Ship do
 
-it 'has name' do
-  expect(cruiser.name).to eq("Cruiser")
-  #=> "Cruiser"
-end
+  cruiser = Ship.new("Cruiser", 3)
 
-it 'has length' do
-  expect(cruiser.length).to eq(3)
-  #=> 3
-end
+  it 'has name' do
+    expect(cruiser.name).to eq("Cruiser")
+  end
 
-it 'has health' do
-  expect(cruiser.health).to eq(3)
-  #=> 3
-end
+  it 'has length' do
+    expect(cruiser.length).to eq(3)
+  end
 
-it 'has sunk?' do
-  expect(cruiser.sunk?).to eq(false)
-  #=> false
-end
+  it 'has health' do
+    expect(cruiser.health).to eq(3)
+  end
 
-it 'has reduced health after hit' do
-  cruiser.hit
+  it 'has sunk?' do
+    expect(cruiser.sunk?).to eq(false)
+  end
 
-  expect(cruiser.health).to eq(2)
-  #=> 2
+  it 'has reduced health after hit' do
+    cruiser.hit
 
-  cruiser.hit
+    expect(cruiser.health).to eq(2)
 
-  expect(cruiser.health).to eq(1)
-  #=> 1
-end
+    cruiser.hit
 
-it 'has sunk' do
-  expect(cruiser.sunk?).to eq(false)
-  #=> false
+    expect(cruiser.health).to eq(1)
+  end
 
-  cruiser.hit
+  it 'has sunk' do
+    expect(cruiser.sunk?).to eq(false)
 
-  expect(cruiser.sunk?).to eq(true)
-  #=> true
+    cruiser.hit
+
+    expect(cruiser.sunk?).to eq(true)
+  end
 end
