@@ -4,7 +4,7 @@ require './lib/cell'
 RSpec.describe Cell do
 	cell = Cell.new("B4")
 	cruiser = Ship.new("Cruiser", 3)
-	
+
 	it 'exists' do
 	 expect(cell).to be_instance_of(Cell)
 	end
@@ -28,5 +28,14 @@ RSpec.describe Cell do
 		expect(cell.empty?).to eq(false)
 	end
 
-	it
+	it 'takes damage when fired upon' do
+		cell.place_ship(cruiser)
+
+		expect(cell.fired_upon?).to eq(false)
+
+		cell.fire_upon
+
+		expect(cell.ship.health).to eq(2)
+		expect(cell.fired_upon?).to eq(true)
+	end
 end
