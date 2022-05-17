@@ -18,4 +18,14 @@ class Cell
 		@ship ||= ship_type
 	end
 
+	def fired_upon?
+		ship.number_of_hits > 0
+	end
+
+	def fire_upon
+		if empty? == false
+			ship.hit
+		end
+	end
+
 end

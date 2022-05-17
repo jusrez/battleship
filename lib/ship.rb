@@ -5,11 +5,11 @@ attr_reader :name, :length, :number_of_hits
   def initialize(name, length)
     @name = name
     @length = length
-    @number_of_hits = []
+    @number_of_hits = 0
   end
 
   def health
-    length - number_of_hits.count
+    length - @number_of_hits
   end
 
   def sunk?
@@ -17,6 +17,6 @@ attr_reader :name, :length, :number_of_hits
   end
 
   def hit
-    number_of_hits << "hit!"
+    @number_of_hits += 1
   end
 end
