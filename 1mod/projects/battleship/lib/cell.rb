@@ -1,5 +1,6 @@
 class Cell
-	def initialize(cell_number)
-		@cell_number
+	attr_reader :coordinate
+	def initialize(coordinate)
+		@coordinate = coordinate
 	end
 end
