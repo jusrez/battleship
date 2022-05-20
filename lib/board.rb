@@ -15,8 +15,6 @@ class Board
 		grid_hash
 	end
 
-
-
   def valid_coordinate?(coordinate)
     cells.include?(coordinate)
   end
@@ -35,8 +33,17 @@ class Board
 			end
 		else
 			false
-
 		end
+	end
+
+	def place(ship, coordinates)
+		# if valid_placement?(ship, coordinates) && coordinates.each {|coordinate| cell}
+
+
+
+	end
+
+	def render
 
 	end
 
