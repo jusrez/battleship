@@ -22,24 +22,22 @@ class Board
   end
 
 	def valid_placement?(ship, coordinates)
-	# 	# if (ship.length == coordinates.count) == false
-	# 	# 	return false
-	# 	# elsif (ship.length == coordinates.count) == true
-	# 	# 	grid = cells.keys
-	# 	# 	coordinate_container = [coordinates]
-	# 	# 	coordinate_set = []
-	# 	# 	grid.each_cons(ship.length) do |set|
-	# 	# 		coordinate_set << set
-	# 	# 	end
-	# 	# 	require "pry"; binding.pry
-	# 	# 	if (coordinate_container - coordinate_set).empty? == false
-	# 	# 		return false
-	# 	# 	elsif (coordinate_container - coordinate_set).empty? == true
-	# 	# 		return true
-	# 	# 	end
-	#
-	# 	end
-	#
-	# end
+		coordinate_letters = coordinates.map {|coordinate| coordinate[0].ord}
+		coordinate_numbers = coordinates.map {|coordinate| coordinate[1].to_i}
+
+		if ship.length == coordinates.count
+			if coordinate_letters.uniq.size == 1 && coordinate_numbers.each_cons(2).all? {|x,y| y == x + 1}
+				true
+			elsif coordinate_numbers.uniq.size == 1 && coordinate_letters.each_cons(2).all? {|x,y| y == x + 1}
+				true
+			else
+				false
+			end
+		else
+			false
+
+		end
+
+	end
 
 end
