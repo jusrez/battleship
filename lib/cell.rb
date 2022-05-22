@@ -37,7 +37,7 @@ class Cell
 	end
 
 	def render(reveal_ship = false)
-		if fired_upon? == false && reveal_ship == true
+		if fired_upon? == false && reveal_ship == true && empty? == false
 			"S"
 		elsif fired_upon? == true && empty? == true
 			"M"
