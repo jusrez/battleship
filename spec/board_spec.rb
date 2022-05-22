@@ -83,10 +83,7 @@ RSpec.describe Board do
     # => true
   end
 
-  xit 'makes sure ships do not overlap' do
-    require './lib/board'
-    require './lib/ship'
-
+  it 'makes sure ships do not overlap' do
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
 
@@ -94,24 +91,64 @@ RSpec.describe Board do
 
     submarine = Ship.new("Submarine", 2)
 
-    board.valid_placement?(submarine, ["A1", "B1"])
-    # => false
+    expect(board.valid_placement?(submarine, ["A1", "B1"])).to eq(false)
   end
 
-  xit 'renders the board' do
-    require './lib/board'
-    require './lib/ship'
-
+  it 'renders the board' do
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
 
     board.place(cruiser, ["A1", "A2", "A3"])
 
-    board.render
-    # => "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
+    expect(board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+	end
 
-    board.render(true)
-    # => "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
+
+		it 'renders the board and reveals ship' do
+	    board = Board.new
+	    cruiser = Ship.new("Cruiser", 3)
+
+	    board.place(cruiser, ["A1", "A2", "A3"])
+
+	    expect(board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+
   end
+
+	it 'renders the board and shows hits' do
+		board = Board.new
+		cruiser = Ship.new("Cruiser", 3)
+
+		board.place(cruiser, ["A1", "A2", "A3"])
+		board.cells["A1"].fire_upon
+
+
+		expect(board.render).to eq("  1 2 3 4 \nA H . . . \nB . . . . \nC . . . . \nD . . . . \n")
+
+end
+
+it 'renders the board and shows misses' do
+	board = Board.new
+	cruiser = Ship.new("Cruiser", 3)
+
+	board.place(cruiser, ["A1", "A2", "A3"])
+	board.cells["B2"].fire_upon
+
+
+	expect(board.render).to eq("  1 2 3 4 \nA . . . . \nB . M . . \nC . . . . \nD . . . . \n")
+
+end
+
+it 'renders the board and shows sunken ships' do
+	board = Board.new
+	cruiser = Ship.new("Cruiser", 3)
+
+	board.place(cruiser, ["A1", "A2", "A3"])
+	board.cells["A1"].fire_upon
+	board.cells["A2"].fire_upon
+	board.cells["A3"].fire_upon
+
+	expect(board.render).to eq("  1 2 3 4 \nA X X X . \nB . . . . \nC . . . . \nD . . . . \n")
+
+end
 
 end
