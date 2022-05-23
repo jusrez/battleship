@@ -35,7 +35,7 @@ class Game
 		submarine_computer = []
 
 		while computer_board.valid_placement?(computer_cruiser, cruiser_computer) == false
-			cruiser_computer << coordinates.sample(3)
+			cruiser_computer << coordinates.sample(3) #if we have time, make this more intentional 
 			cruiser_computer.flatten!
 			if computer_board.valid_placement?(computer_cruiser, cruiser_computer) == false
 				cruiser_computer.clear
@@ -43,6 +43,7 @@ class Game
 				break
 			end
 		end
+		computer_board.place(computer_cruiser, cruiser_computer)
 
 		while computer_board.valid_placement?(computer_submarine, submarine_computer) == false
 			submarine_computer << coordinates.sample(2)
@@ -54,7 +55,7 @@ class Game
 			end
 		end
 
-		computer_board.place(computer_cruiser, cruiser_computer)
+
 		computer_board.place(computer_submarine, submarine_computer)
 		puts "I have laid out my ships on the grid."
 		puts "You now need to lay out your two ships."
@@ -74,7 +75,7 @@ class Game
 		while cruiser_placed == 0
 			cruiser_player << gets.upcase.split
 			cruiser_player.flatten!
-			if cruiser_player.all? {|coordinate| player_board.valid_coordinate?(coordinate)}
+			if cruiser_player.all? {|coordinate| player_board.valid_coordinate?(coordinate)} #at some point we could add valid_coordinate into the valid_placement method
 					if player_board.valid_placement?(player_cruiser, cruiser_player)
 						player_board.place(player_cruiser, cruiser_player)
 						cruiser_placed += 1
@@ -115,6 +116,66 @@ class Game
 
 	end
 
+	def computer_turn
+		coordinates = computer_board.cells.keys
+		computer_coordinate = coordinates.sample
+		puts "The computer has taken a shot at coordinate: #{computer_coordinate}"
+		player_board.fire_upon(computer_coordinate)
+		if player_board.render_indiv(computer_coordinate) == "M"
+			puts "The computer's shot was a miss!"
+		elsif player_board.render_indiv(computer_coordinate) == "H"
+			puts "The computer's shot was a hit!"
+		elsif player_board.render_indiv(computer_coordinate) == "X"
+			puts "The computer's shot was a hit and your vessel has sunk!"
+		end
+
+		puts "=============COMPUTER BOARD============="
+		print computer_board.render
+		puts "==============PLAYER BOARD=============="
+		print player_board.render(true)
+
+		if player_fleet_sunk?
+			puts "You have lost this round due to your tactical inferiority."
+			puts " ~GAME OVER~ "
+			main_menu
+		else
+			player_turn
+		end
+	end
+
+	def player_turn
+		puts "It's your turn! Enter the coordinate for your shot:"
+		coordinate = gets.chomp.upcase
+		computer_board.fire_upon(coordinate)
+		if computer_board.render_indiv(coordinate) == "M"
+			puts "Your shot was a miss!"
+		elsif computer_board.render_indiv(coordinate) == "H"
+			puts "Your shot was a hit!"
+		elsif computer_board.render_indiv(coordinate) == "X"
+			puts "Your shot was a hit and the computer's vessel has sunk!"
+		end
+
+		puts "=============COMPUTER BOARD============="
+		print computer_board.render
+		puts "==============PLAYER BOARD=============="
+		print player_board.render(true)
+
+		if computer_fleet_sunk?
+			puts "You have won this round thanks to your tactical superiority."
+			puts " ~GAME OVER~ "
+			main_menu
+		else
+			computer_turn
+		end
+	end
+
+	def computer_fleet_sunk?
+		computer_submarine.sunk? && computer_cruiser.sunk?
+	end
+
+	def player_fleet_sunk?
+		player_submarine.sunk? && player_cruiser.sunk?
+	end
 
 
 end
