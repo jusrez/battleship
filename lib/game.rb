@@ -35,7 +35,7 @@ class Game
 		submarine_computer = []
 
 		while computer_board.valid_placement?(computer_cruiser, cruiser_computer) == false
-			cruiser_computer << coordinates.sample(3)
+			cruiser_computer << coordinates.sample(3) #if we have time, make this more intentional 
 			cruiser_computer.flatten!
 			if computer_board.valid_placement?(computer_cruiser, cruiser_computer) == false
 				cruiser_computer.clear
@@ -43,6 +43,7 @@ class Game
 				break
 			end
 		end
+		computer_board.place(computer_cruiser, cruiser_computer)
 
 		while computer_board.valid_placement?(computer_submarine, submarine_computer) == false
 			submarine_computer << coordinates.sample(2)
@@ -54,7 +55,7 @@ class Game
 			end
 		end
 
-		computer_board.place(computer_cruiser, cruiser_computer)
+
 		computer_board.place(computer_submarine, submarine_computer)
 		puts "I have laid out my ships on the grid."
 		puts "You now need to lay out your two ships."
@@ -74,7 +75,7 @@ class Game
 		while cruiser_placed == 0
 			cruiser_player << gets.upcase.split
 			cruiser_player.flatten!
-			if cruiser_player.all? {|coordinate| player_board.valid_coordinate?(coordinate)}
+			if cruiser_player.all? {|coordinate| player_board.valid_coordinate?(coordinate)} #at some point we could add valid_coordinate into the valid_placement method
 					if player_board.valid_placement?(player_cruiser, cruiser_player)
 						player_board.place(player_cruiser, cruiser_player)
 						cruiser_placed += 1
@@ -136,6 +137,7 @@ class Game
 		if player_fleet_sunk?
 			puts "You have lost this round due to your tactical inferiority."
 			puts " ~GAME OVER~ "
+			main_menu
 		else
 			player_turn
 		end
@@ -161,13 +163,14 @@ class Game
 		if computer_fleet_sunk?
 			puts "You have won this round thanks to your tactical superiority."
 			puts " ~GAME OVER~ "
+			main_menu
 		else
 			computer_turn
 		end
 	end
 
 	def computer_fleet_sunk?
-		computer_submarine.sunk? && computer_cruiser.sunk? 
+		computer_submarine.sunk? && computer_cruiser.sunk?
 	end
 
 	def player_fleet_sunk?
