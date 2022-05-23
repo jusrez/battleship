@@ -52,7 +52,6 @@ class Board
 			cells[cell].fire_upon
 		else
 			puts "You chose poorly, you fool! That coordinate is invalid. You lose a turn."
-
 		end
 	end
 
@@ -71,6 +70,4 @@ class Board
 			cells[shot].render
 		end
 	end
-
-
 end
