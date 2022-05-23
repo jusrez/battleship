@@ -132,8 +132,13 @@ class Game
 		print computer_board.render
 		puts "==============PLAYER BOARD=============="
 		print player_board.render(true)
-		
-		player_turn
+
+		if player_fleet_sunk?
+			puts "You have lost this round due to your tactical inferiority."
+			puts " ~GAME OVER~ "
+		else
+			player_turn
+		end
 	end
 
 	def player_turn
@@ -153,9 +158,21 @@ class Game
 		puts "==============PLAYER BOARD=============="
 		print player_board.render(true)
 
-		computer_turn
+		if computer_fleet_sunk?
+			puts "You have won this round thanks to your tactical superiority."
+			puts " ~GAME OVER~ "
+		else
+			computer_turn
+		end
 	end
 
+	def computer_fleet_sunk?
+		computer_submarine.sunk? && computer_cruiser.sunk? 
+	end
+
+	def player_fleet_sunk?
+		player_submarine.sunk? && player_cruiser.sunk?
+	end
 
 
 end
