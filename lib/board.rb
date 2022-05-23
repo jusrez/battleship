@@ -47,6 +47,14 @@ class Board
 		coordinates.map {|coordinate| cells[coordinate].place_ship(ship)}
 	end
 
+	def fire_upon(cell)
+		if valid_coordinate?(cell)
+			cells[cell].fire_upon
+		else
+			puts "You chose poorly, you fool! That coordinate is invalid. You lose a turn."
+		end
+	end
+
 	def render(reveal_ship = false)
 	row_1 = "  1 2 3 4 \n"
 	row_2 = "A #{cells["A1"].render(reveal_ship)} #{cells["A2"].render(reveal_ship)} #{cells["A3"].render(reveal_ship)} #{cells["A4"].render(reveal_ship)} \n"
@@ -55,6 +63,10 @@ class Board
 	row_5 = "D #{cells["D1"].render(reveal_ship)} #{cells["D2"].render(reveal_ship)} #{cells["D3"].render(reveal_ship)} #{cells["D4"].render(reveal_ship)} \n"
 
 	return row_1.concat(row_2, row_3, row_4, row_5)
+	end
+
+	def render_indiv(shot)
+		cells[shot].render
 	end
 
 
