@@ -115,6 +115,47 @@ class Game
 
 	end
 
+	def computer_turn
+		coordinates = computer_board.cells.keys
+		computer_coordinate = coordinates.sample
+		puts "The computer has taken a shot at coordinate: #{computer_coordinate}"
+		player_board.fire_upon(computer_coordinate)
+		if player_board.render_indiv(computer_coordinate) == "M"
+			puts "The computer's shot was a miss!"
+		elsif player_board.render_indiv(computer_coordinate) == "H"
+			puts "The computer's shot was a hit!"
+		elsif player_board.render_indiv(computer_coordinate) == "X"
+			puts "The computer's shot was a hit and your vessel has sunk!"
+		end
+
+		puts "=============COMPUTER BOARD============="
+		print computer_board.render
+		puts "==============PLAYER BOARD=============="
+		print player_board.render(true)
+		
+		player_turn
+	end
+
+	def player_turn
+		puts "It's your turn! Enter the coordinate for your shot:"
+		coordinate = gets.chomp.upcase
+		computer_board.fire_upon(coordinate)
+		if computer_board.render_indiv(coordinate) == "M"
+			puts "Your shot was a miss!"
+		elsif computer_board.render_indiv(coordinate) == "H"
+			puts "Your shot was a hit!"
+		elsif computer_board.render_indiv(coordinate) == "X"
+			puts "Your shot was a hit and the computer's vessel has sunk!"
+		end
+
+		puts "=============COMPUTER BOARD============="
+		print computer_board.render
+		puts "==============PLAYER BOARD=============="
+		print player_board.render(true)
+
+		computer_turn
+	end
+
 
 
 end
