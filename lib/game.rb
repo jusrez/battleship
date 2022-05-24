@@ -13,16 +13,21 @@ class Game
 		@computer_submarine = Ship.new("Submarine", 2)
 		@player_cruiser = Ship.new("Cruiser", 3)
 		@player_submarine = Ship.new("Submarine", 2)
+		@computer_coordinates = computer_board.cells.keys
 	end
 
 	def main_menu
-		puts "Welcome to BATTLESHIP"
-		puts "Enter p to play. Enter q to quit."
+		puts "*" * 100
+		puts "Welcome to:"
+		battleship_writing
+		puts "*" * 100
+		puts "Enter <p> to play. Enter <q> to quit."
 		answer = gets.chomp.downcase
 		if answer == "p"
 			return computer_setup
 		elsif answer == "q"
-			puts "Later loser ✌️"
+			puts "Later, loser ✌️"
+			exit
 		else
 			puts "Wrong input. Try again."
 			return main_menu
@@ -34,8 +39,9 @@ class Game
 		cruiser_computer = []
 		submarine_computer = []
 
+		puts "*" * 100
 		while computer_board.valid_placement?(computer_cruiser, cruiser_computer) == false
-			cruiser_computer << coordinates.sample(3) #if we have time, make this more intentional 
+			cruiser_computer << coordinates.sample(3) #if we have time, make this more intentional
 			cruiser_computer.flatten!
 			if computer_board.valid_placement?(computer_cruiser, cruiser_computer) == false
 				cruiser_computer.clear
@@ -55,12 +61,13 @@ class Game
 			end
 		end
 
-
 		computer_board.place(computer_submarine, submarine_computer)
+		quick_pause
 		puts "I have laid out my ships on the grid."
+		quick_pause
 		puts "You now need to lay out your two ships."
-
-		return player_setup
+		quick_pause
+		player_setup
 	end
 
 	def player_setup
@@ -69,8 +76,10 @@ class Game
 		cruiser_placed = 0
 		submarine_placed = 0
 		puts "The Cruiser is three units long and the Submarine is two units long."
+		quick_pause
+		puts "~" * 100
 		print player_board.render
-		puts "Enter the squares for the Cruiser (3 spaces): "
+		puts "Enter the coordinates for the Cruiser (3 coordinates each separated by a space): "
 
 		while cruiser_placed == 0
 			cruiser_player << gets.upcase.split
@@ -88,9 +97,9 @@ class Game
 					puts "Those are invalid coordinates. Please try again:"
 			end
 		end
-
+		puts "~" * 100
 		print player_board.render(true)
-		puts "Enter the squares for the Submarine (2 spaces): "
+		puts "Enter the coordinates for the Submarine (2 coordinates each separated by a space): "
 
 		while submarine_placed == 0
 			submarine_player << gets.upcase.split
@@ -108,18 +117,20 @@ class Game
 					puts "Those are invalid coordinates. Please try again:"
 			end
 		end
-
+		puts "*" * 100
 		puts "=============COMPUTER BOARD============="
 		print computer_board.render
 		puts "==============PLAYER BOARD=============="
 		print player_board.render(true)
-
+		quick_pause
 	end
 
 	def computer_turn
-		coordinates = computer_board.cells.keys
-		computer_coordinate = coordinates.sample
+
+		computer_coordinate = @computer_coordinates.sample
+		@computer_coordinates.delete(computer_coordinate)
 		puts "The computer has taken a shot at coordinate: #{computer_coordinate}"
+		quick_pause
 		player_board.fire_upon(computer_coordinate)
 		if player_board.render_indiv(computer_coordinate) == "M"
 			puts "The computer's shot was a miss!"
@@ -128,15 +139,17 @@ class Game
 		elsif player_board.render_indiv(computer_coordinate) == "X"
 			puts "The computer's shot was a hit and your vessel has sunk!"
 		end
-
+		quick_pause
+		puts "*" * 100
 		puts "=============COMPUTER BOARD============="
 		print computer_board.render
 		puts "==============PLAYER BOARD=============="
 		print player_board.render(true)
-
+		quick_pause
 		if player_fleet_sunk?
 			puts "You have lost this round due to your tactical inferiority."
-			puts " ~GAME OVER~ "
+			game_over
+			quick_pause
 			main_menu
 		else
 			player_turn
@@ -147,6 +160,7 @@ class Game
 		puts "It's your turn! Enter the coordinate for your shot:"
 		coordinate = gets.chomp.upcase
 		computer_board.fire_upon(coordinate)
+		quick_pause
 		if computer_board.render_indiv(coordinate) == "M"
 			puts "Your shot was a miss!"
 		elsif computer_board.render_indiv(coordinate) == "H"
@@ -154,15 +168,17 @@ class Game
 		elsif computer_board.render_indiv(coordinate) == "X"
 			puts "Your shot was a hit and the computer's vessel has sunk!"
 		end
-
+		quick_pause
+		puts "*" * 100
 		puts "=============COMPUTER BOARD============="
 		print computer_board.render
 		puts "==============PLAYER BOARD=============="
 		print player_board.render(true)
-
+		quick_pause
 		if computer_fleet_sunk?
 			puts "You have won this round thanks to your tactical superiority."
-			puts " ~GAME OVER~ "
+			game_over
+			quick_pause
 			main_menu
 		else
 			computer_turn
@@ -177,5 +193,33 @@ class Game
 		player_submarine.sunk? && player_cruiser.sunk?
 	end
 
+	def quick_pause
+		sleep(0.25)
+		puts "***"
+		sleep (0.25)
+		puts "**"
+		sleep(0.25)
+		puts"*"
+		sleep(0.25)
+	end
 
+	def battleship_writing
+		puts "
+		╭━━╮╭━━━┳━━━━┳━━━━┳╮╱╱╭━━━┳━━━┳╮╱╭┳━━┳━━━╮
+		┃╭╮┃┃╭━╮┃╭╮╭╮┃╭╮╭╮┃┃╱╱┃╭━━┫╭━╮┃┃╱┃┣┫┣┫╭━╮┃
+		┃╰╯╰┫┃╱┃┣╯┃┃╰┻╯┃┃╰┫┃╱╱┃╰━━┫╰━━┫╰━╯┃┃┃┃╰━╯┃
+		┃╭━╮┃╰━╯┃╱┃┃╱╱╱┃┃╱┃┃╱╭┫╭━━┻━━╮┃╭━╮┃┃┃┃╭━━╯
+		┃╰━╯┃╭━╮┃╱┃┃╱╱╱┃┃╱┃╰━╯┃╰━━┫╰━╯┃┃╱┃┣┫┣┫┃
+		╰━━━┻╯╱╰╯╱╰╯╱╱╱╰╯╱╰━━━┻━━━┻━━━┻╯╱╰┻━━┻╯"
+	end
+
+	def game_over
+		puts "
+		░██████╗░░█████╗░███╗░░░███╗███████╗  ░█████╗░██╗░░░██╗███████╗██████╗░
+		██╔════╝░██╔══██╗████╗░████║██╔════╝  ██╔══██╗██║░░░██║██╔════╝██╔══██╗
+		██║░░██╗░███████║██╔████╔██║█████╗░░  ██║░░██║╚██╗░██╔╝█████╗░░██████╔╝
+		██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░  ██║░░██║░╚████╔╝░██╔══╝░░██╔══██╗
+		╚██████╔╝██║░░██║██║░╚═╝░██║███████╗  ╚█████╔╝░░╚██╔╝░░███████╗██║░░██║
+		░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝  ░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝"
+	end
 end
