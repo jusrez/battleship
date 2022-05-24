@@ -4,8 +4,4 @@ require './lib/cell'
 require './lib/ship'
 
 game = Game.new
-
 game.main_menu
-
-
-game.player_turn
