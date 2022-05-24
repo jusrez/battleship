@@ -49,6 +49,7 @@ class Game
 		puts "Enter the coordinates for the Submarine (2 coordinates each separated by a space): "
 		place_submarine
 		render_boards
+		computer_turn
 	end
 
 	def computer_turn
