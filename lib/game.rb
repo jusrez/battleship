@@ -17,21 +17,9 @@ class Game
 	end
 
 	def main_menu
-		puts "*" * 100
-		puts "Welcome to:"
-		battleship_writing
-		puts "*" * 100
-		puts "Enter <p> to play. Enter <q> to quit."
+		welcome_message
 		answer = gets.chomp.downcase
-		if answer == "p"
-			return computer_setup
-		elsif answer == "q"
-			puts "Later, loser ✌️"
-			exit
-		else
-			puts "Wrong input. Try again."
-			return main_menu
-		end
+		main_menu_input(answer)
 	end
 
 	def computer_setup
@@ -201,6 +189,30 @@ class Game
 		sleep(0.25)
 		puts"*"
 		sleep(0.25)
+	end
+
+	def page_break
+		puts "*" * 100
+	end
+
+	def welcome_message
+		puts page_break
+		puts "Welcome to:"
+		puts battleship_writing
+		puts page_break
+		puts "Enter <p> to play. Enter <q> to quit."
+	end
+
+	def main_menu_input(input)
+		if input == "p"
+			computer_setup
+		elsif input == "q"
+			puts "Later, loser ✌️"
+			exit
+		else
+			puts "Wrong input. Try again."
+			return main_menu
+		end
 	end
 
 	def battleship_writing
