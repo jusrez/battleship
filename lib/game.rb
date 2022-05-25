@@ -147,8 +147,6 @@ class Game
 			@submarine_computer.flatten!
 			if computer_board.valid_placement?(@computer_submarine, @submarine_computer) == false
 				@submarine_computer.clear
-			else
-				break
 			end
 		end
 	end
