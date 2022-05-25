@@ -4,7 +4,9 @@ class Game
 							:computer_cruiser,
 							:computer_submarine,
 							:player_cruiser,
-							:player_submarine
+							:player_submarine,
+							:submarine_computer,
+							:cruiser_computer
 
 	def initialize
 		@computer_board = Board.new
@@ -69,6 +71,12 @@ class Game
 	def player_turn
 		puts "It's your turn! Enter the coordinate for your shot:"
 		coordinate = gets.chomp.upcase
+		if computer_board.render_indiv(coordinate) != "."
+			quick_pause
+			puts "You have already fired on that coordinate, try again"
+			quick_pause
+			player_turn
+		end
 		computer_board.fire_upon(coordinate)
 		quick_pause
 		puts "Your shot was a miss!" if computer_board.render_indiv(coordinate) == "M"
@@ -139,8 +147,6 @@ class Game
 			@submarine_computer.flatten!
 			if computer_board.valid_placement?(@computer_submarine, @submarine_computer) == false
 				@submarine_computer.clear
-			else
-				break
 			end
 		end
 	end
