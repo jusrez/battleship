@@ -71,6 +71,12 @@ class Game
 	def player_turn
 		puts "It's your turn! Enter the coordinate for your shot:"
 		coordinate = gets.chomp.upcase
+		if computer_board.valid_coordinate?(coordinate) == false
+			quick_pause
+			puts "Oopsie! That coordinate is invalid, try again"
+			quick_pause
+			player_turn
+		end
 		if computer_board.render_indiv(coordinate) != "."
 			quick_pause
 			puts "You have already fired on that coordinate, try again"
